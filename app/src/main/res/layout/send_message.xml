@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:maxWidth="300dp"
         android:padding="8dp"
-        app:cardBackgroundColor="#A9F44336"
+        app:cardBackgroundColor="#2196F3"
         app:cardCornerRadius="20dp"
         app:cardUseCompatPadding="false"
         app:layout_constraintBottom_toBottomOf="parent"
