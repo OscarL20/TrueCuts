@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/profile" android:title="Profile" android:icon="@drawable/ic_person_24px"/>
+    <item android:id="@+id/inviteFriends" android:title="Invite Friends" android:icon="@drawable/ic_share_24px" />
+    <item android:id="@+id/changeShop" android:title="Change Barber Shop" android:icon="@drawable/ic_barber_pole"/>
+    <item android:id="@+id/signOut" android:title="Sign Out" android:icon="@drawable/ic_exit_to_app_24px"/>
+
+</menu>

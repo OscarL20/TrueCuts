@@ -1,0 +1,51 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+
+        <item name="android:statusBarColor">@color/black</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/someRed</item>
+    </style>
+
+    <style name="LoginTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:statusBarColor">#FFFFFF</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+
+
+    <style name="ToolbarTextAppearance">
+        <item name="android:fontFamily">@font/sf_pro_display_bold</item>
+    </style>
+
+
+    <style name="SplashTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:statusBarColor">@color/black</item>
+        <item name="android:windowBackground">@drawable/splash_background</item>
+    </style>
+
+    <style name="CustomToolbarTheme" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <!-- HERE ARE THE CHANGES - Change color of different texts -->
+        <item name="android:textColorPrimary">@color/colorPrimaryDark</item>
+        <item name="colorControlNormal">@color/colorAccent</item>
+    </style>
+
+    <!--<style name="CalenderViewCustom" parent="Theme.AppCompat">
+        <item name="colorAccent">@color/someRed</item>
+        <item name="colorPrimary">@color/someRed</item>
+    </style>-->
+
+    <style name="CalenderViewDateCustomText" parent="android:TextAppearance.DeviceDefault.Small">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:weekNumberColor">@color/black</item>
+        <item name="android:headerMonthTextAppearance">@color/someRed</item>
+    </style>
+
+    <style name="CalenderViewWeekCustomText" parent="android:TextAppearance.DeviceDefault.Small">
+        <item name="android:textColor">@color/someRed</item>
+    </style>
+
+</resources>
