@@ -5,12 +5,14 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,8 +54,9 @@ public class MessagesFragment extends Fragment implements MessagesAdapter.OnRecy
     Boolean isBarber;
 
 
-
     String currentUserUid;
+
+    android.widget.Toolbar toolbar;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -77,11 +80,24 @@ public class MessagesFragment extends Fragment implements MessagesAdapter.OnRecy
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        chatViewModel = ViewModelProviders.of(getActivity()).get(ChatViewModel.class);
+
+        toolbar = view.findViewById(R.id.toolbar);
+        toolbar.setTitle(chatViewModel.getOtherPersonsName());
+        toolbar.setTitleTextAppearance(getContext(), R.style.ToolbarTextAppearance);
+        toolbar.setNavigationIcon(R.drawable.navigation_menu_icon);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DrawerLayout drawerLayout = getActivity().findViewById(R.id.drawerLayout);
+                drawerLayout.openDrawer(Gravity.LEFT);
+            }});
+
         currentUserUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         isBarber = myResultReceiver.getResult();
 
-        chatViewModel = ViewModelProviders.of(getActivity()).get(ChatViewModel.class);
         send = view.findViewById(R.id.imgButton);
         editTextMessage = view.findViewById(R.id.editText);
         recyclerView = view.findViewById(R.id.recyclerView);
