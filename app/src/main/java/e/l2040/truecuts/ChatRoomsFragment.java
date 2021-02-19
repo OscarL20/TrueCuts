@@ -6,12 +6,14 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +29,8 @@ import java.util.List;
 
 
 public class ChatRoomsFragment extends Fragment implements ChatRoomsAdapter.OnRecyclerListener{
+
+    android.widget.Toolbar toolbar;
 
     RecyclerView recyclerView;
     ChatRoomsAdapter chatRoomsAdapter;
@@ -59,6 +63,17 @@ public class ChatRoomsFragment extends Fragment implements ChatRoomsAdapter.OnRe
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        toolbar = view.findViewById(R.id.toolbar);
+        toolbar.setTitle("Messages");
+        toolbar.setTitleTextAppearance(getContext(), R.style.ToolbarTextAppearance);
+        toolbar.setNavigationIcon(R.drawable.navigation_menu_icon);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DrawerLayout drawerLayout = getActivity().findViewById(R.id.drawerLayout);
+                drawerLayout.openDrawer(Gravity.LEFT);
+            }});
 
         chatViewModel = ViewModelProviders.of(getActivity()).get(ChatViewModel.class);
 

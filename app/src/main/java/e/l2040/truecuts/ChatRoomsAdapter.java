@@ -16,6 +16,9 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
+
 public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.ChatRoomsViewHolder>{
 
     private Context ctx;
@@ -57,7 +60,7 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<ChatRoomsAdapter.Chat
 
         TextView otherPersonsName;
         TextView lastText;
-        ImageView otherPersonsImage;
+        CircleImageView otherPersonsImage;
 
         OnRecyclerListener onRecyclerListener;
 
