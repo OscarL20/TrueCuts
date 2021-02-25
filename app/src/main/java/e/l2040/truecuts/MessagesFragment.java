@@ -175,6 +175,8 @@ public class MessagesFragment extends Fragment implements MessagesAdapter.OnRecy
 
                     chats.child("messages").push().setValue(messageObj);
 
+                    editTextMessage.getText().clear();
+
                 }
                 else{
                     //create chat by
@@ -232,6 +234,8 @@ public class MessagesFragment extends Fragment implements MessagesAdapter.OnRecy
                                     chatViewModel.setChatRoomId(chatRoomId);
 
                                     loadMessages(chatViewModel.getChatRoomId());
+
+                                    editTextMessage.getText().clear();
                                 }
 
                                 @Override

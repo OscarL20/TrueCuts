@@ -105,28 +105,47 @@ public class BarberHomeFragment extends Fragment implements View.OnClickListener
         barberUpcomingAppointmentAdapter = new BarberUpcomingAppointmentAdapter(getContext(), upcomingAppointmentList, this);
         recyclerView.setAdapter(barberUpcomingAppointmentAdapter);
 
+
         currentUserUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        FirebaseDatabase.getInstance().getReference().child("barbers").child(currentUserUid).child("appointments").addValueEventListener(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("barbers").child(currentUserUid).child("username").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    upcomingAppointmentList.clear();
-                    customerAppointmentList.clear();
+                String userName = dataSnapshot.getValue(String.class);
+                ((Home) getActivity()).navUsername.setText(userName);
+                ((Home) getActivity()).navShopName.setText("");
 
-                    //check if a date exists, might crash if there is no child under appointmentsRequested
-                    for (DataSnapshot snapshotDate : dataSnapshot.getChildren()) {
-                        CustomerAppointment customerAppointment;
-                        for (DataSnapshot snapshotTime : snapshotDate.getChildren()) {
-                            customerAppointment = snapshotTime.getValue(CustomerAppointment.class);
 
-                            customerAppointmentList.add(customerAppointment);
+
+                FirebaseDatabase.getInstance().getReference().child("barbers").child(currentUserUid).child("appointments").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            upcomingAppointmentList.clear();
+                            customerAppointmentList.clear();
+
+                            //check if a date exists, might crash if there is no child under appointmentsRequested
+                            for (DataSnapshot snapshotDate : dataSnapshot.getChildren()) {
+                                CustomerAppointment customerAppointment;
+                                for (DataSnapshot snapshotTime : snapshotDate.getChildren()) {
+                                    customerAppointment = snapshotTime.getValue(CustomerAppointment.class);
+
+                                    customerAppointmentList.add(customerAppointment);
+                                }
+                            }
+                            getUris();
                         }
-                    }
-                    getUris();
-                }
 
-                constraintLayoutTwo.setVisibility(View.INVISIBLE);
-                coordinatorLayout.setVisibility(View.VISIBLE);
+                        constraintLayoutTwo.setVisibility(View.INVISIBLE);
+                        coordinatorLayout.setVisibility(View.VISIBLE);
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
 
             }
 
@@ -135,6 +154,7 @@ public class BarberHomeFragment extends Fragment implements View.OnClickListener
 
             }
         });
+
     }
 
     private void getUris() {

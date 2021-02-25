@@ -41,14 +41,15 @@ public class AlertDialogDetails extends DialogFragment{
         TextView time = v.findViewById(R.id.time);
         time.setText(appointmentWithCustomerViewModel.getTime().get(0));
 
-        Button message = v.findViewById(R.id.messagenoww);
+        //*********interferes with create chat logic******
+        /*Button message = v.findViewById(R.id.messagenoww);
         message.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 dismiss();
                 getFragmentManager().beginTransaction().replace(R.id.fragment_container, new MessagesFragment()).commit();
             }
-        });
+        });*/
 
         Button cancelAppointment = v.findViewById(R.id.cancelAppointment);
         cancelAppointment.setOnClickListener(new View.OnClickListener() {

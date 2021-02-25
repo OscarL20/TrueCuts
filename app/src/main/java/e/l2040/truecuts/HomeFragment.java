@@ -152,25 +152,34 @@ public class HomeFragment extends Fragment implements RecentAppointmentAdapter.O
 
 
         final String currentUserUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        FirebaseDatabase.getInstance().getReference().child("users").child(currentUserUid).child("appointments").addValueEventListener(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("users").child(currentUserUid).child("username").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    upcomingAppointmentList.clear();
-                    appointmentWithTheBarberList.clear();
+                String userName = dataSnapshot.getValue(String.class);
+                ((Home) getActivity()).navUsername.setText(userName);
+                ((Home) getActivity()).navShopName.setText("");
 
-                    listOfLists.clear();
-                    recentListOfLists.clear();
 
-                    listProfileImages.clear();
-                    recentListProfileImages.clear();
 
-                    listBarberShopImages.clear();
-                    recentListBarberShopImages.clear();
+                FirebaseDatabase.getInstance().getReference().child("users").child(currentUserUid).child("appointments").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            upcomingAppointmentList.clear();
+                            appointmentWithTheBarberList.clear();
 
-                    //check if a date exists, might crash if there is no child under appointmentsRequested
-                    for (DataSnapshot snapshotDate : dataSnapshot.getChildren()) {
-                            AppointmentWithTheBarber appointmentWithTheBarber;
+                            listOfLists.clear();
+                            recentListOfLists.clear();
+
+                            listProfileImages.clear();
+                            recentListProfileImages.clear();
+
+                            listBarberShopImages.clear();
+                            recentListBarberShopImages.clear();
+
+                            //check if a date exists, might crash if there is no child under appointmentsRequested
+                            for (DataSnapshot snapshotDate : dataSnapshot.getChildren()) {
+                                AppointmentWithTheBarber appointmentWithTheBarber;
 
                                 for (DataSnapshot snapshotTime : snapshotDate.getChildren()) {
                                     appointmentWithTheBarber = snapshotTime.getValue(AppointmentWithTheBarber.class);
@@ -188,42 +197,49 @@ public class HomeFragment extends Fragment implements RecentAppointmentAdapter.O
                                         databaseReference.setValue(appointmentWithTheBarber);
 
                                         //remove that time from appointments in firebase
-                                          snapshotTime.getRef().removeValue();
+                                        snapshotTime.getRef().removeValue();
 
                                     }
                                     else{
                                         appointmentWithTheBarberList.add(appointmentWithTheBarber);
                                     }
                                 }
-                    }
-                    getUris();
-                }
-
-                //Populate recent appointments recycler view
-
-                FirebaseDatabase.getInstance().getReference().child("users").child(currentUserUid).child("recentAppointments").addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.exists()) {
-                            recentAppointmentList.clear();
-                            appointmentWithTheBarberList1.clear();
-                            for (DataSnapshot snapshotDate : dataSnapshot.getChildren()) {
-                                AppointmentWithTheBarber recentAppointment;
-
-                                for (DataSnapshot snapshotTime : snapshotDate.getChildren()) {
-                                    recentAppointment = snapshotTime.getValue(AppointmentWithTheBarber.class);
-
-
-                                    appointmentWithTheBarberList1.add(recentAppointment);
-                                }
                             }
-                            getUrisRecent();
-                        }else{
-                            constraintLayoutTwo.setVisibility(View.INVISIBLE);
-                            coordinatorLayout.setVisibility(View.VISIBLE);
+                            getUris();
                         }
 
+                        //Populate recent appointments recycler view
+
+                        FirebaseDatabase.getInstance().getReference().child("users").child(currentUserUid).child("recentAppointments").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.exists()) {
+                                    recentAppointmentList.clear();
+                                    appointmentWithTheBarberList1.clear();
+                                    for (DataSnapshot snapshotDate : dataSnapshot.getChildren()) {
+                                        AppointmentWithTheBarber recentAppointment;
+
+                                        for (DataSnapshot snapshotTime : snapshotDate.getChildren()) {
+                                            recentAppointment = snapshotTime.getValue(AppointmentWithTheBarber.class);
+
+
+                                            appointmentWithTheBarberList1.add(recentAppointment);
+                                        }
+                                    }
+                                    getUrisRecent();
+                                }else{
+                                    constraintLayoutTwo.setVisibility(View.INVISIBLE);
+                                    coordinatorLayout.setVisibility(View.VISIBLE);
+                                }
+
+                            }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
                     }
+
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
 
@@ -236,6 +252,8 @@ public class HomeFragment extends Fragment implements RecentAppointmentAdapter.O
 
             }
         });
+
+
 
     }
 

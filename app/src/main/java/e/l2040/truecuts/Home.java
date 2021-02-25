@@ -35,6 +35,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, MyResultReceiver{
@@ -45,7 +46,8 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     User user;
     BottomNavigationView bottomNavigationView;
 
-
+    TextView navUsername;
+    TextView navShopName;
 
     boolean isBarber;
 
@@ -79,6 +81,11 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
             View navHeaderBarber = navigationView.inflateHeaderView(R.layout.nav_header);
             navigationView.inflateMenu(R.menu.drawermenu);
+            navUsername = (TextView) navHeaderBarber.findViewById(R.id.navName);
+            navShopName = (TextView) navHeaderBarber.findViewById(R.id.navShopName);
+            navUsername.setText("wasup");
+            navShopName.setText("wasup");
+
             final ImageView headerViewImage = navHeaderBarber.findViewById(R.id.headerViewImage);
 
             profileImageRefBarber.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -103,6 +110,12 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
             View navHeaderCustomer = navigationView.inflateHeaderView(R.layout.nav_header);
             navigationView.inflateMenu(R.menu.drawermenu_customer);
+            navUsername = (TextView) navHeaderCustomer.findViewById(R.id.navName);
+            navShopName = (TextView) navHeaderCustomer.findViewById(R.id.navShopName);
+            navUsername.setText("wasup");
+            navShopName.setText("wasup");
+
+
             final ImageView headerViewImage = navHeaderCustomer.findViewById(R.id.headerViewImage);
 
             profileImageRefCustomer.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -190,6 +203,28 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SelectingImageCustomer()).commit();
                 break;
             }
+
+            case R.id.inviteFriends:{
+                try {
+                    Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                    shareIntent.setType("text/plain");
+                    shareIntent.putExtra(Intent.EXTRA_SUBJECT, "My application name");
+                    String shareMessage= "\nLet me recommend you this application\n\n";
+                    shareMessage = shareMessage + "https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID +"\n\n";
+                    shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
+                    startActivity(Intent.createChooser(shareIntent, "choose one"));
+                } catch(Exception e) {
+                    //e.toString();
+                }
+                break;
+            }
+
+            case R.id.signOut:{
+                Intent myIntent = new Intent(Home.this, Login.class);
+                startActivity(myIntent);
+                FirebaseAuth.getInstance().signOut();
+            }
+
         }
         DrawerLayout drawerLayout = findViewById(R.id.drawerLayout);
         drawerLayout.closeDrawer(GravityCompat.START);
