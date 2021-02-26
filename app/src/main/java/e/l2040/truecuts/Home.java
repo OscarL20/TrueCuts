@@ -88,10 +88,13 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
             final ImageView headerViewImage = navHeaderBarber.findViewById(R.id.headerViewImage);
 
-            profileImageRefBarber.addListenerForSingleValueEvent(new ValueEventListener() {
+            profileImageRefBarber.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    Picasso.with(getApplicationContext()).load(dataSnapshot.getValue(String.class)).resize(100,100).centerCrop().into(headerViewImage);
+                    if (dataSnapshot.exists()){
+                        Picasso.with(getApplicationContext()).load(dataSnapshot.getValue(String.class)).resize(100,100).centerCrop().into(headerViewImage);
+                    }
+
                 }
 
                 @Override
@@ -118,10 +121,13 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
             final ImageView headerViewImage = navHeaderCustomer.findViewById(R.id.headerViewImage);
 
-            profileImageRefCustomer.addListenerForSingleValueEvent(new ValueEventListener() {
+            profileImageRefCustomer.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    Picasso.with(getApplicationContext()).load(dataSnapshot.getValue(String.class)).resize(100,100).centerCrop().into(headerViewImage);
+                    if (dataSnapshot.exists()){
+                        Picasso.with(getApplicationContext()).load(dataSnapshot.getValue(String.class)).resize(100,100).centerCrop().into(headerViewImage);
+                    }
+
                 }
 
                 @Override

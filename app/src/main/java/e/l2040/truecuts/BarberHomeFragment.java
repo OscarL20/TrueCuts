@@ -112,7 +112,6 @@ public class BarberHomeFragment extends Fragment implements View.OnClickListener
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 String userName = dataSnapshot.getValue(String.class);
                 ((Home) getActivity()).navUsername.setText(userName);
-                ((Home) getActivity()).navShopName.setText("");
 
 
 
@@ -137,6 +136,25 @@ public class BarberHomeFragment extends Fragment implements View.OnClickListener
 
                         constraintLayoutTwo.setVisibility(View.INVISIBLE);
                         coordinatorLayout.setVisibility(View.VISIBLE);
+
+
+
+
+                        FirebaseDatabase.getInstance().getReference().child("barbers").child(currentUserUid).child("barberShopName").addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if(dataSnapshot.exists()){
+                                    ((Home) getActivity()).navShopName.setText(dataSnapshot.getValue(String.class));
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+
+
 
                     }
 
