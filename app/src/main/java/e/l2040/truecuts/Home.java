@@ -83,8 +83,8 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
             navigationView.inflateMenu(R.menu.drawermenu);
             navUsername = (TextView) navHeaderBarber.findViewById(R.id.navName);
             navShopName = (TextView) navHeaderBarber.findViewById(R.id.navShopName);
-            navUsername.setText("wasup");
-            navShopName.setText("wasup");
+            navUsername.setText("userName");
+            navShopName.setText("");
 
             final ImageView headerViewImage = navHeaderBarber.findViewById(R.id.headerViewImage);
 

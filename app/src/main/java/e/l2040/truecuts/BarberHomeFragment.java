@@ -115,7 +115,7 @@ public class BarberHomeFragment extends Fragment implements View.OnClickListener
 
 
 
-                FirebaseDatabase.getInstance().getReference().child("barbers").child(currentUserUid).child("appointments").addValueEventListener(new ValueEventListener() {
+                FirebaseDatabase.getInstance().getReference().child("barbers").child(currentUserUid).child("appointments").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()) {
