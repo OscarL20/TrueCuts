@@ -21,11 +21,14 @@ import android.view.ViewGroup;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 
 public class ChatRoomsFragment extends Fragment implements ChatRoomsAdapter.OnRecyclerListener{
@@ -136,6 +139,8 @@ public class ChatRoomsFragment extends Fragment implements ChatRoomsAdapter.OnRe
         }
 
     }
+
+
 
     @Override
     public void onRecyclerClick(int position) {

@@ -10,6 +10,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.FirebaseInstanceIdReceiver;
 import com.squareup.picasso.Picasso;
 
 import androidx.annotation.Size;
@@ -37,6 +39,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import e.l2040.truecuts.SendNotificationPack.Token;
 
 public class Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, MyResultReceiver{
 
@@ -139,6 +143,16 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
             bottomNavigationView.inflateMenu(R.menu.bottom_navigation);
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
         }
+
+        UpdateToken();
+
+    }
+
+    private void UpdateToken(){
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        String refreshToken = FirebaseInstanceId.getInstance().getToken();
+        Token token = new Token(refreshToken);
+        FirebaseDatabase.getInstance().getReference("Tokens").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(token);
     }
 
 

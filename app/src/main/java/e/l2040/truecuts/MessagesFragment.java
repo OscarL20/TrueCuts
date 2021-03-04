@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -36,6 +37,15 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import e.l2040.truecuts.SendNotificationPack.APIService;
+import e.l2040.truecuts.SendNotificationPack.Client;
+import e.l2040.truecuts.SendNotificationPack.Data;
+import e.l2040.truecuts.SendNotificationPack.MyResponse;
+import e.l2040.truecuts.SendNotificationPack.NotificationSender;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class MessagesFragment extends Fragment implements MessagesAdapter.OnRecyclerListener{
@@ -55,6 +65,8 @@ public class MessagesFragment extends Fragment implements MessagesAdapter.OnRecy
 
 
     String currentUserUid;
+
+    private APIService apiService;
 
     android.widget.Toolbar toolbar;
 
@@ -80,6 +92,8 @@ public class MessagesFragment extends Fragment implements MessagesAdapter.OnRecy
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
 
         chatViewModel = ViewModelProviders.of(getActivity()).get(ChatViewModel.class);
 
@@ -177,6 +191,23 @@ public class MessagesFragment extends Fragment implements MessagesAdapter.OnRecy
 
                     editTextMessage.getText().clear();
 
+
+                    //notification ******************************
+
+                    FirebaseDatabase.getInstance().getReference().child("Tokens").child(chatViewModel.getOtherPersonsUid()).child("token").addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            String usertoken = dataSnapshot.getValue(String.class);
+                            sendNotifications(usertoken, chatViewModel.getOtherPersonsName(), editTextMessage.getText().toString());
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+
+
                 }
                 else{
                     //create chat by
@@ -236,6 +267,23 @@ public class MessagesFragment extends Fragment implements MessagesAdapter.OnRecy
                                     loadMessages(chatViewModel.getChatRoomId());
 
                                     editTextMessage.getText().clear();
+
+
+                                    //notification ******************************
+
+                                    FirebaseDatabase.getInstance().getReference().child("Tokens").child(chatViewModel.getOtherPersonsUid()).child("token").addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            String usertoken = dataSnapshot.getValue(String.class);
+                                            sendNotifications(usertoken, chatViewModel.getOtherPersonsName(), editTextMessage.getText().toString());
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                        }
+                                    });
+
                                 }
 
                                 @Override
@@ -259,6 +307,33 @@ public class MessagesFragment extends Fragment implements MessagesAdapter.OnRecy
         
 
     }
+
+
+
+    public void sendNotifications(String usertoken, String title, String message){
+        Data data = new Data(title, message);
+        NotificationSender sender = new NotificationSender(data, usertoken);
+        apiService.sendNotification(sender).enqueue(new Callback<MyResponse>() {
+            @Override
+            public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
+                if (response.code() == 200){
+                    if (response.body().success != 1){
+                        Toast.makeText(getContext(), "Failed", Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MyResponse> call, Throwable t) {
+
+            }
+        });
+    }
+
+
+
+
+
 
     public void loadMessages(String chatRoomId) {
 
