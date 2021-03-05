@@ -14,6 +14,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -37,6 +38,8 @@ public class FavoritesFragment extends Fragment implements RecentAppointmentAdap
     List<List<Uri>> listOfLists;
     List<Uri> listProfileImages;
     List<Uri> listBarberShopImages;
+
+    TextView noFavoriteBarber;
 
     private int counter;
 
@@ -72,6 +75,7 @@ public class FavoritesFragment extends Fragment implements RecentAppointmentAdap
                 drawerLayout.openDrawer(Gravity.LEFT);
             }});
 
+        noFavoriteBarber = (TextView) view.findViewById(R.id.noFavoriteBarber);
 
         favoritesList = new ArrayList<>();
         favoritesList1 = new ArrayList<>();
@@ -99,6 +103,10 @@ public class FavoritesFragment extends Fragment implements RecentAppointmentAdap
                             favoritesList1.add(favorites);
                     }
                     getUris();
+
+                    noFavoriteBarber.setAlpha(0);
+                }else{
+                    noFavoriteBarber.setAlpha(1);
                 }
 
             }

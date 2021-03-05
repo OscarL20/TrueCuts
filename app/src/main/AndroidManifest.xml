@@ -27,6 +27,7 @@
 
         
         <activity android:name=".SplashScreen"
+            android:screenOrientation="portrait"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -36,16 +37,26 @@
         </activity>
 
         <activity android:name=".Login"
+            android:screenOrientation="portrait"
             android:theme="@style/LoginTheme">
         </activity>
 
         <activity
-        android:name=".Search"/>
-        <activity android:name=".ResetPassword" />
-        <activity android:name=".BarberOrNot" />
-        <activity android:name=".CreateAccount" />
+        android:name=".Search"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".ResetPassword"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".BarberOrNot"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".CreateAccount"
+            android:screenOrientation="portrait"/>
+
         <activity android:name=".Home"
-            android:windowSoftInputMode="adjustNothing">
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
             <action android:name="android.intent.action.MAIN" />
 
@@ -53,14 +64,29 @@
         </intent-filter>
 
         </activity>
-        <activity android:name=".BarberDetails" />
-        <activity android:name=".BookAppointment" />
-        <activity android:name=".BarberHome" />
-        <activity android:name=".ChangeBarberShop" />
-        <activity android:name=".Appointments" />
-        <activity android:name=".AppointmentsDetails" />
-        <activity android:name=".AppointmentWithCustomer" />
-        <activity android:name=".AppointmentWithCustomerDetails" />
+        <activity android:name=".BarberDetails"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".BookAppointment"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".BarberHome"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".ChangeBarberShop"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".Appointments"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".AppointmentsDetails"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".AppointmentWithCustomer"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".AppointmentWithCustomerDetails"
+            android:screenOrientation="portrait"/>
     </application>
 
 

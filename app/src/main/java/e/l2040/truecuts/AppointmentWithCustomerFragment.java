@@ -17,6 +17,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -43,6 +44,8 @@ public class AppointmentWithCustomerFragment extends Fragment implements BarberU
 
     android.widget.Toolbar toolbar;
     private int i;
+
+    TextView noRequestedAppointments;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -74,6 +77,9 @@ public class AppointmentWithCustomerFragment extends Fragment implements BarberU
                 drawerLayout.openDrawer(Gravity.LEFT);
             }});
 
+        noRequestedAppointments = (TextView) view.findViewById(R.id.noRequestedAppointments);
+        noRequestedAppointments.setAlpha(0);
+
         requestedAppointmentList = new ArrayList<>();
         customerAppointmentList = new ArrayList<>();
 
@@ -89,6 +95,8 @@ public class AppointmentWithCustomerFragment extends Fragment implements BarberU
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
+                    noRequestedAppointments.setAlpha(0);
+
                     requestedAppointmentList.clear();
                     customerAppointmentList.clear();
 
@@ -104,6 +112,8 @@ public class AppointmentWithCustomerFragment extends Fragment implements BarberU
                         }
                     }
                     getUris();
+                }else {
+                    noRequestedAppointments.setAlpha(1);
                 }
             }
 

@@ -1,5 +1,6 @@
 package e.l2040.truecuts;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 
@@ -16,6 +17,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -89,6 +91,7 @@ public class MessagesFragment extends Fragment implements MessagesAdapter.OnRecy
         myResultReceiver = (MyResultReceiver)context;
     }
 
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -108,6 +111,7 @@ public class MessagesFragment extends Fragment implements MessagesAdapter.OnRecy
                 drawerLayout.openDrawer(Gravity.LEFT);
             }});
 
+
         currentUserUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         isBarber = myResultReceiver.getResult();
@@ -122,6 +126,7 @@ public class MessagesFragment extends Fragment implements MessagesAdapter.OnRecy
 
         messagesAdapter = new MessagesAdapter(getContext(), messageList, this);
         recyclerView.setAdapter(messagesAdapter);
+
 
         //if chat exists, load messages and assign a boolean variable as true
         //if chat doesnt exist, assign a boolean variable as false
@@ -148,6 +153,9 @@ public class MessagesFragment extends Fragment implements MessagesAdapter.OnRecy
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                hideSoftKeyboard(getActivity());
+
                 if(chatRoomExist){
                     //place message accordingly by
                     //update children for users/userId/chats/chatId and barbers/userId/chats/chatId (only have to update senderID,date&Time,Message)
@@ -304,9 +312,17 @@ public class MessagesFragment extends Fragment implements MessagesAdapter.OnRecy
         });
 
 
-        
-
     }
+
+
+    public static void hideSoftKeyboard(Activity activity) {
+        if (activity.getCurrentFocus() == null) {
+            return;
+        }
+        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+    }
+
 
 
 

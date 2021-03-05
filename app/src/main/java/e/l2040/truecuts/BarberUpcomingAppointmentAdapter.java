@@ -42,7 +42,7 @@ public class BarberUpcomingAppointmentAdapter extends RecyclerView.Adapter<Barbe
         barberUpcomingAppointmentViewHolder.customerName.setText(upcomingAppointment.getName());
         barberUpcomingAppointmentViewHolder.date.setText(upcomingAppointment.getDate());
         barberUpcomingAppointmentViewHolder.time.setText(upcomingAppointment.getTime());
-        Picasso.with(ctx).load(upcomingAppointment.getUri()).resize(100,100).centerCrop().into(barberUpcomingAppointmentViewHolder.image);
+        Picasso.with(ctx).load(upcomingAppointment.getUri()).fit().into(barberUpcomingAppointmentViewHolder.image);
     }
 
     @Override

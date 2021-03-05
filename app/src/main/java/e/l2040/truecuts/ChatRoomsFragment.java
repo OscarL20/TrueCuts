@@ -17,6 +17,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -26,6 +27,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +37,9 @@ import java.util.List;
 public class ChatRoomsFragment extends Fragment implements ChatRoomsAdapter.OnRecyclerListener{
 
     android.widget.Toolbar toolbar;
+
+    TextView noChatsBarber;
+    TextView noChatsCustomer;
 
     RecyclerView recyclerView;
     ChatRoomsAdapter chatRoomsAdapter;
@@ -78,6 +84,11 @@ public class ChatRoomsFragment extends Fragment implements ChatRoomsAdapter.OnRe
                 drawerLayout.openDrawer(Gravity.LEFT);
             }});
 
+        noChatsBarber = (TextView) view.findViewById(R.id.noChatsBarber);
+        noChatsBarber.setAlpha(0);
+        noChatsCustomer = (TextView) view.findViewById(R.id.noChatsCustomer);
+        noChatsCustomer.setAlpha(0);
+
         chatViewModel = ViewModelProviders.of(getActivity()).get(ChatViewModel.class);
 
         recyclerView = view.findViewById(R.id.recyclerView);
@@ -96,16 +107,23 @@ public class ChatRoomsFragment extends Fragment implements ChatRoomsAdapter.OnRe
             FirebaseDatabase.getInstance().getReference().child("barbers").child(currentUserUid).child("chats").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    metaDataChatList.clear();
-                    MetaDataChat metaDataChat;
+                    if (dataSnapshot.exists()){
+                        noChatsBarber.setAlpha(0);
 
-                    for (DataSnapshot chatRoomData: dataSnapshot.getChildren()){
+                        metaDataChatList.clear();
+                        MetaDataChat metaDataChat;
+
+                        for (DataSnapshot chatRoomData: dataSnapshot.getChildren()){
                             metaDataChat = chatRoomData.getValue(MetaDataChat.class);
 
                             metaDataChatList.add(metaDataChat);
+                        }
+
+                        chatRoomsAdapter.notifyDataSetChanged();
+                    }else {
+                        noChatsBarber.setAlpha(1);
                     }
 
-                    chatRoomsAdapter.notifyDataSetChanged();
                 }
 
                 @Override
@@ -118,16 +136,23 @@ public class ChatRoomsFragment extends Fragment implements ChatRoomsAdapter.OnRe
             FirebaseDatabase.getInstance().getReference().child("users").child(currentUserUid).child("chats").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    metaDataChatList.clear();
-                    MetaDataChat metaDataChat;
+                    if (dataSnapshot.exists()){
+                        noChatsCustomer.setAlpha(0);
 
-                    for (DataSnapshot chatRoomData: dataSnapshot.getChildren()){
-                        metaDataChat = chatRoomData.getValue(MetaDataChat.class);
+                        metaDataChatList.clear();
+                        MetaDataChat metaDataChat;
 
-                        metaDataChatList.add(metaDataChat);
+                        for (DataSnapshot chatRoomData: dataSnapshot.getChildren()){
+                            metaDataChat = chatRoomData.getValue(MetaDataChat.class);
+
+                            metaDataChatList.add(metaDataChat);
+                        }
+
+                        chatRoomsAdapter.notifyDataSetChanged();
+                    }else {
+                        noChatsCustomer.setAlpha(1);
                     }
 
-                    chatRoomsAdapter.notifyDataSetChanged();
 
                 }
 

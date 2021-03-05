@@ -1,5 +1,6 @@
 package e.l2040.truecuts;
 
+import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -267,6 +268,8 @@ public class ChangeBarberShopFragment extends Fragment implements ChangeBarberSh
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
+                hideSoftKeyboard(getActivity());
+
                 //call search method, pass search string
                 showList(s);
                 zipcode = s;
@@ -315,5 +318,16 @@ public class ChangeBarberShopFragment extends Fragment implements ChangeBarberSh
         super.onActivityCreated(savedInstanceState);
 
     }
+
+
+    public static void hideSoftKeyboard(Activity activity) {
+        if (activity.getCurrentFocus() == null) {
+            return;
+        }
+        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+    }
+
+
 
 }

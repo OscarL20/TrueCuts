@@ -35,7 +35,7 @@ public class PhotoUriAdapter extends RecyclerView.Adapter<PhotoUriAdapter.PhotoV
     public void onBindViewHolder(@NonNull PhotoViewHolder photoViewHolder, int position) {
         PhotoUri photoUri = photoList.get(position);
 
-        Picasso.with(ctx).load(photoUri.getUri()).into(photoViewHolder.image);
+        Picasso.with(ctx).load(photoUri.getUri()).fit().centerCrop().into(photoViewHolder.image);
     }
 
     @Override

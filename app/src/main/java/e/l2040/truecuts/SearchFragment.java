@@ -1,5 +1,6 @@
 package e.l2040.truecuts;
 
+import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -40,6 +41,7 @@ import com.google.firebase.database.ValueEventListener;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -60,6 +62,8 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Re
 
     android.widget.Toolbar toolbar;
 
+    TextView noBarbersTxt;
+
 
 
     @Override
@@ -78,7 +82,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Re
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         toolbar = view.findViewById(R.id.toolbar);
-        toolbar.setTitle("Search");
+        toolbar.setTitle("Find Barber");
         toolbar.setTitleTextAppearance(getContext(), R.style.ToolbarTextAppearance);
         toolbar.setNavigationIcon(R.drawable.navigation_menu_icon);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -88,12 +92,17 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Re
                 drawerLayout.openDrawer(Gravity.LEFT);
             }});
 
+        noBarbersTxt = (TextView) view.findViewById(R.id.noBarbersTxt);
+        noBarbersTxt.setAlpha(0);
+
 
         android.widget.SearchView searchView = getView().findViewById(R.id.searchView);
         searchView.setMaxWidth(Integer.MAX_VALUE);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
+                hideSoftKeyboard(getActivity());
+
                 //call search method, pass search string
                 search(s);
                 return true;
@@ -150,25 +159,39 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Re
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                            Barber barber = snapshot.getValue(Barber.class);
-                            if ((barber.getZipcode() != null) && (barber.getZipcode().equals(zipcode))){
+                        if (dataSnapshot.exists()){
+                            boolean someBarberExists = false;
 
-                                String profileImageString = snapshot.child("images").child("ProfileImage").getValue(String.class);
-                                Uri profileImageUri = Uri.parse(profileImageString);
+                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                Barber barber = snapshot.getValue(Barber.class);
+                                if ((barber.getZipcode() != null) && (barber.getZipcode().equals(zipcode))){
 
-                                searchResultsList.add(
-                                        new RecentAppointment(
-                                                barber.getBarberShopName(),
-                                                barber.getUsername(),
-                                                barber.getAddress(),
-                                                profileImageUri));
+                                    String profileImageString = snapshot.child("images").child("ProfileImage").getValue(String.class);
+                                    Uri profileImageUri = Uri.parse(profileImageString);
 
-                                barberId.add(barber.getUid());
+                                    searchResultsList.add(
+                                            new RecentAppointment(
+                                                    barber.getBarberShopName(),
+                                                    barber.getUsername(),
+                                                    barber.getAddress(),
+                                                    profileImageUri));
 
-                                recentAppointmentAdapter.notifyDataSetChanged();
+                                    barberId.add(barber.getUid());
+
+                                    recentAppointmentAdapter.notifyDataSetChanged();
+
+                                    someBarberExists = true;
+                                }
                             }
+                            if (someBarberExists){
+                                noBarbersTxt.setAlpha(0);
+                            }else {
+                                noBarbersTxt.setAlpha(1);
+                            }
+                        }else {
+                            noBarbersTxt.setAlpha(1);
                         }
+
                     }
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
@@ -238,4 +261,15 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Re
         }
 
     }
+
+
+    public static void hideSoftKeyboard(Activity activity) {
+        if (activity.getCurrentFocus() == null) {
+            return;
+        }
+        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+    }
+
+
 }

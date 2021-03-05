@@ -1,5 +1,6 @@
 package e.l2040.truecuts;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -15,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -166,5 +168,6 @@ public class SelectingImageCustomer extends Fragment {
             Toast.makeText(getContext(), "Profile Image Added", Toast.LENGTH_SHORT).show();
             getFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
         }
+
     }
 

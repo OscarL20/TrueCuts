@@ -45,6 +45,8 @@ public class BarberHomeFragment extends Fragment implements View.OnClickListener
     Button search;
     Button toggle;
 
+    TextView noUpcomingAppointments;
+
     String currentUserUid;
 
     RecyclerView recyclerView;
@@ -88,6 +90,10 @@ public class BarberHomeFragment extends Fragment implements View.OnClickListener
                 drawerLayout.openDrawer(Gravity.LEFT);
             }});
 
+        noUpcomingAppointments = (TextView) view.findViewById(R.id.noUpcomingAppointments);
+        noUpcomingAppointments.setAlpha(0);
+
+
         constraintLayoutTwo = getActivity().findViewById(R.id.progressBar);
 
         coordinatorLayout = getActivity().findViewById(R.id.coordinatorLayout);
@@ -110,8 +116,10 @@ public class BarberHomeFragment extends Fragment implements View.OnClickListener
         FirebaseDatabase.getInstance().getReference().child("barbers").child(currentUserUid).child("username").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                String userName = dataSnapshot.getValue(String.class);
-                ((Home) getActivity()).navUsername.setText(userName);
+                if (dataSnapshot.exists()){
+                    String userName = dataSnapshot.getValue(String.class);
+                    ((Home) getActivity()).navUsername.setText(userName);
+                }
 
 
 
@@ -119,6 +127,8 @@ public class BarberHomeFragment extends Fragment implements View.OnClickListener
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()) {
+                            noUpcomingAppointments.setAlpha(0);
+
                             upcomingAppointmentList.clear();
                             customerAppointmentList.clear();
 
@@ -132,6 +142,8 @@ public class BarberHomeFragment extends Fragment implements View.OnClickListener
                                 }
                             }
                             getUris();
+                        }else {
+                            noUpcomingAppointments.setAlpha(1);
                         }
 
                         constraintLayoutTwo.setVisibility(View.INVISIBLE);
@@ -140,7 +152,7 @@ public class BarberHomeFragment extends Fragment implements View.OnClickListener
 
 
 
-                        FirebaseDatabase.getInstance().getReference().child("barbers").child(currentUserUid).child("barberShopName").addValueEventListener(new ValueEventListener() {
+                        FirebaseDatabase.getInstance().getReference().child("barbers").child(currentUserUid).child("barberShopName").addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 if(dataSnapshot.exists()){

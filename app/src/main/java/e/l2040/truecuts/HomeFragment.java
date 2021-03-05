@@ -1,6 +1,8 @@
 package e.l2040.truecuts;
 
+import android.app.Activity;
 import android.app.MediaRouteButton;
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -21,8 +23,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -55,6 +59,9 @@ public class HomeFragment extends Fragment implements RecentAppointmentAdapter.O
     View constraintLayoutTwo;
 
     Toolbar toolbar;
+
+    TextView noUpcomingAppointments;
+    TextView noRecentAppointments;
 
     RecyclerView recyclerView;
     RecentAppointmentAdapter recentAppointmentAdapter;
@@ -113,6 +120,9 @@ public class HomeFragment extends Fragment implements RecentAppointmentAdapter.O
                 drawerLayout.openDrawer(Gravity.LEFT);
             }});
 
+        noUpcomingAppointments = (TextView) view.findViewById(R.id.noUpcomingAppointment);
+        noRecentAppointments = (TextView) view.findViewById(R.id.noRecentAppointments);
+
 
         constraintLayoutTwo = getActivity().findViewById(R.id.constraintLayoutTwo);
         coordinatorLayout = getActivity().findViewById(R.id.coordinatorLayout);
@@ -155,9 +165,13 @@ public class HomeFragment extends Fragment implements RecentAppointmentAdapter.O
         FirebaseDatabase.getInstance().getReference().child("users").child(currentUserUid).child("username").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                String userName = dataSnapshot.getValue(String.class);
-                ((Home) getActivity()).navUsername.setText(userName);
-                ((Home) getActivity()).navShopName.setText("");
+                if (dataSnapshot.exists()){
+
+                    String userName = dataSnapshot.getValue(String.class);
+                    ((Home) getActivity()).navUsername.setText(userName);
+                    ((Home) getActivity()).navShopName.setText("");
+                }
+
 
 
 
@@ -165,6 +179,8 @@ public class HomeFragment extends Fragment implements RecentAppointmentAdapter.O
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()) {
+                            noUpcomingAppointments.setAlpha(0);
+
                             upcomingAppointmentList.clear();
                             appointmentWithTheBarberList.clear();
 
@@ -206,6 +222,8 @@ public class HomeFragment extends Fragment implements RecentAppointmentAdapter.O
                                 }
                             }
                             getUris();
+                        }else{
+                            noUpcomingAppointments.setAlpha(1);
                         }
 
                         //Populate recent appointments recycler view
@@ -214,6 +232,7 @@ public class HomeFragment extends Fragment implements RecentAppointmentAdapter.O
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 if (dataSnapshot.exists()) {
+                                    noRecentAppointments.setAlpha(0);
                                     recentAppointmentList.clear();
                                     appointmentWithTheBarberList1.clear();
                                     for (DataSnapshot snapshotDate : dataSnapshot.getChildren()) {
@@ -230,6 +249,8 @@ public class HomeFragment extends Fragment implements RecentAppointmentAdapter.O
                                 }else{
                                     constraintLayoutTwo.setVisibility(View.INVISIBLE);
                                     coordinatorLayout.setVisibility(View.VISIBLE);
+
+                                    noRecentAppointments.setAlpha(1);
                                 }
 
                             }
@@ -256,6 +277,8 @@ public class HomeFragment extends Fragment implements RecentAppointmentAdapter.O
 
 
     }
+
+
 
     private void getUrisRecent() {
         if(counter < appointmentWithTheBarberList1.size()){
@@ -426,4 +449,5 @@ public class HomeFragment extends Fragment implements RecentAppointmentAdapter.O
 
         getFragmentManager().beginTransaction().replace(R.id.fragment_container, new AppointmentDetailsFragment()).commit();
     }
+
 }

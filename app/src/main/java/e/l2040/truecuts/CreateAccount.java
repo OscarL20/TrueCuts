@@ -49,40 +49,45 @@ public class CreateAccount extends AppCompatActivity {
 
 
     public void createAccount(View view){
-        mAuth.createUserWithEmailAndPassword(email.getText().toString(), password.getText().toString())
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            //Add user to database also add true or false in BarberOrNot section of database
+        if (password.getText().toString().equals(confirmPassword.getText().toString())) {
 
-                            boolean barberOrNot = intentInfo.getBooleanExtra("barberOrNot", false);
-                            if (barberOrNot){
-                                Barber barber = new Barber(email.getText().toString(), true, username.getText().toString(), task.getResult().getUser().getUid());
-                                FirebaseDatabase database = FirebaseDatabase.getInstance();
-                                DatabaseReference databaseReference = database.getReference().child("barbers").child(task.getResult().getUser().getUid());
-                                databaseReference.setValue(barber);
+            mAuth.createUserWithEmailAndPassword(email.getText().toString(), password.getText().toString())
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                //Add user to database also add true or false in BarberOrNot section of database
 
-                                Intent myIntent = new Intent(CreateAccount.this, Home.class);
-                                myIntent.putExtra("isBarber", true);
-                                CreateAccount.this.startActivity(myIntent);
-                            }else{
-                                User user = new User(email.getText().toString(), false, username.getText().toString());
-                                FirebaseDatabase database = FirebaseDatabase.getInstance();
-                                DatabaseReference databaseReference = database.getReference().child("users").child(task.getResult().getUser().getUid());
-                                databaseReference.setValue(user);
+                                boolean barberOrNot = intentInfo.getBooleanExtra("barberOrNot", false);
+                                if (barberOrNot) {
+                                    Barber barber = new Barber(email.getText().toString(), true, username.getText().toString(), task.getResult().getUser().getUid());
+                                    FirebaseDatabase database = FirebaseDatabase.getInstance();
+                                    DatabaseReference databaseReference = database.getReference().child("barbers").child(task.getResult().getUser().getUid());
+                                    databaseReference.setValue(barber);
 
-                                Intent myIntent = new Intent(CreateAccount.this, Home.class);
-                                myIntent.putExtra("isBarber", false);
-                                CreateAccount.this.startActivity(myIntent);
+                                    Intent myIntent = new Intent(CreateAccount.this, Home.class);
+                                    myIntent.putExtra("isBarber", true);
+                                    CreateAccount.this.startActivity(myIntent);
+                                } else {
+                                    User user = new User(email.getText().toString(), false, username.getText().toString());
+                                    FirebaseDatabase database = FirebaseDatabase.getInstance();
+                                    DatabaseReference databaseReference = database.getReference().child("users").child(task.getResult().getUser().getUid());
+                                    databaseReference.setValue(user);
+
+                                    Intent myIntent = new Intent(CreateAccount.this, Home.class);
+                                    myIntent.putExtra("isBarber", false);
+                                    CreateAccount.this.startActivity(myIntent);
+                                }
+
+
+                            } else {
+                                Toast.makeText(CreateAccount.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
                             }
 
-
-                        } else {
-                            Toast.makeText(CreateAccount.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
                         }
-
-                    }
-                });
+                    });
+        }else {
+            Toast.makeText(this, "Passwords must be the same", Toast.LENGTH_SHORT).show();
+        }
     }
 }

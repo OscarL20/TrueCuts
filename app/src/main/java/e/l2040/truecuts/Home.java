@@ -60,6 +60,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+
         NavigationView navigationView = (NavigationView) findViewById(R.id.drawerNavigation);
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -96,7 +97,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()){
-                        Picasso.with(getApplicationContext()).load(dataSnapshot.getValue(String.class)).resize(100,100).centerCrop().into(headerViewImage);
+                        Picasso.with(getApplicationContext()).load(dataSnapshot.getValue(String.class)).fit().centerCrop().into(headerViewImage);
                     }
 
                 }
@@ -129,7 +130,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()){
-                        Picasso.with(getApplicationContext()).load(dataSnapshot.getValue(String.class)).resize(100,100).centerCrop().into(headerViewImage);
+                        Picasso.with(getApplicationContext()).load(dataSnapshot.getValue(String.class)).fit().centerCrop().into(headerViewImage);
                     }
 
                 }
