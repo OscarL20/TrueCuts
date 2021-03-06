@@ -132,7 +132,7 @@ public class BarberDetailsFragment extends Fragment implements View.OnClickListe
 
         switch (view.getId()){
             case R.id.back:
-                getFragmentManager().beginTransaction().replace(R.id.fragment_container, new SearchFragment()).commit();
+                //getFragmentManager().beginTransaction().replace(R.id.fragment_container, new SearchFragment()).commit();
                 break;
 
             case R.id.messageButton:
@@ -165,12 +165,12 @@ public class BarberDetailsFragment extends Fragment implements View.OnClickListe
                                 chatViewModel.setOtherPersonsName(model.getBarber());
                                 chatViewModel.setOtherPersonsUid(model.getUid());
                                 chatViewModel.setChatRoomId("empty");
-                                getFragmentManager().beginTransaction().replace(R.id.fragment_container, new MessagesFragment()).commit();
+                                getFragmentManager().beginTransaction().replace(R.id.fragment_container, new MessagesFragment()).addToBackStack(null).commit();
 
                                 Log.i("checking", "chat doesnt exist");
                             }
                             else{
-                                getFragmentManager().beginTransaction().replace(R.id.fragment_container, new MessagesFragment()).commit();
+                                getFragmentManager().beginTransaction().replace(R.id.fragment_container, new MessagesFragment()).addToBackStack(null).commit();
                             }
 
 
@@ -178,7 +178,7 @@ public class BarberDetailsFragment extends Fragment implements View.OnClickListe
                             chatViewModel.setOtherPersonsName(model.getBarber());
                             chatViewModel.setOtherPersonsUid(model.getUid());
                             chatViewModel.setChatRoomId("empty");
-                            getFragmentManager().beginTransaction().replace(R.id.fragment_container, new MessagesFragment()).commit();
+                            getFragmentManager().beginTransaction().replace(R.id.fragment_container, new MessagesFragment()).addToBackStack(null).commit();
 
                             Log.i("checking", "data doesnt exist");
                         }
@@ -194,7 +194,7 @@ public class BarberDetailsFragment extends Fragment implements View.OnClickListe
 
 
             case R.id.bookAppointment:
-                getFragmentManager().beginTransaction().replace(R.id.fragment_container, new BookAppointmentFragment()).commit();
+                getFragmentManager().beginTransaction().replace(R.id.fragment_container, new BookAppointmentFragment()).addToBackStack(null).commit();
                 break;
 
             case R.id.floatingActionButton:

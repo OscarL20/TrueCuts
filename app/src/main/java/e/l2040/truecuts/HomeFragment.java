@@ -422,7 +422,7 @@ public class HomeFragment extends Fragment implements RecentAppointmentAdapter.O
                         myViewModel.setBarberShopImage(recentListBarberShopImages.get(position));
 
 
-                        getFragmentManager().beginTransaction().replace(R.id.fragment_container, new BarberDetailsFragment()).commit();
+                        getFragmentManager().beginTransaction().replace(R.id.fragment_container, new BarberDetailsFragment()).addToBackStack(null).commit();
                     }
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
@@ -447,7 +447,7 @@ public class HomeFragment extends Fragment implements RecentAppointmentAdapter.O
         appointmentViewModel.setListOfUris(listOfLists.get(position));
         appointmentViewModel.setBarberShopImage(listBarberShopImages.get(position));
 
-        getFragmentManager().beginTransaction().replace(R.id.fragment_container, new AppointmentDetailsFragment()).commit();
+        getFragmentManager().beginTransaction().replace(R.id.fragment_container, new AppointmentDetailsFragment()).addToBackStack(null).commit();
     }
 
 }

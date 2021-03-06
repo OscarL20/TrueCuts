@@ -192,6 +192,6 @@ public class FavoritesFragment extends Fragment implements RecentAppointmentAdap
         myViewModel.setListOfUris(listOfLists.get(position));
         myViewModel.setBarberShopImage(listBarberShopImages.get(position));
 
-        getFragmentManager().beginTransaction().replace(R.id.fragment_container, new BarberDetailsFragment()).commit();
+        getFragmentManager().beginTransaction().replace(R.id.fragment_container, new BarberDetailsFragment()).addToBackStack(null).commit();
     }
 }

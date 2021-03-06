@@ -163,10 +163,10 @@ public class AppointmentDetailsFragment extends Fragment implements View.OnClick
                                 chatViewModel.setOtherPersonsName(appointmentViewModel.getBarberName());
                                 chatViewModel.setOtherPersonsUid(appointmentViewModel.getUid());
                                 chatViewModel.setChatRoomId("empty");
-                                getFragmentManager().beginTransaction().replace(R.id.fragment_container, new MessagesFragment()).commit();
+                                getFragmentManager().beginTransaction().replace(R.id.fragment_container, new MessagesFragment()).addToBackStack(null).commit();
                             }
                             else{
-                                getFragmentManager().beginTransaction().replace(R.id.fragment_container, new MessagesFragment()).commit();
+                                getFragmentManager().beginTransaction().replace(R.id.fragment_container, new MessagesFragment()).addToBackStack(null).commit();
                             }
 
 
@@ -174,7 +174,7 @@ public class AppointmentDetailsFragment extends Fragment implements View.OnClick
                             chatViewModel.setOtherPersonsName(appointmentViewModel.getBarberName());
                             chatViewModel.setOtherPersonsUid(appointmentViewModel.getUid());
                             chatViewModel.setChatRoomId("empty");
-                            getFragmentManager().beginTransaction().replace(R.id.fragment_container, new MessagesFragment()).commit();
+                            getFragmentManager().beginTransaction().replace(R.id.fragment_container, new MessagesFragment()).addToBackStack(null).commit();
                         }
                     }
 

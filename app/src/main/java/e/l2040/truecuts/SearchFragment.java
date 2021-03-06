@@ -235,7 +235,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Re
                             model.setListOfUris(listPreviousWork);
                             model.setBarberShopImage(barberShopImageUri);
 
-                            getFragmentManager().beginTransaction().replace(R.id.fragment_container, new BarberDetailsFragment()).commit();
+                            getFragmentManager().beginTransaction().replace(R.id.fragment_container, new BarberDetailsFragment()).addToBackStack(null).commit();
 
                         }else{
 

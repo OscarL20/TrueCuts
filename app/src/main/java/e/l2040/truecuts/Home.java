@@ -23,6 +23,7 @@ import androidx.core.view.MenuItemCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
@@ -110,7 +111,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
 
             bottomNavigationView.inflateMenu(R.menu.barber_bottom_navigation);
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new BarberHomeFragment()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new BarberHomeFragment()).addToBackStack(null).commit();
         }
         else{
             DatabaseReference profileImageRefCustomer = FirebaseDatabase.getInstance().getReference().child("users")
@@ -142,7 +143,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
 
             bottomNavigationView.inflateMenu(R.menu.bottom_navigation);
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).addToBackStack(null).commit();
         }
 
         UpdateToken();
@@ -200,7 +201,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
             }
 
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).addToBackStack(null).commit();
 
             return true;
         }
@@ -211,17 +212,17 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()){
             case R.id.changeShop: {
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ChangeBarberShopFragment()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ChangeBarberShopFragment()).addToBackStack(null).commit();
                 break;
             }
 
             case R.id.profile: {
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new BarberEditProfile()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new BarberEditProfile()).addToBackStack(null).commit();
                 break;
             }
 
             case R.id.changeImage:{
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SelectingImageCustomer()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SelectingImageCustomer()).addToBackStack(null).commit();
                 break;
             }
 
@@ -256,7 +257,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     public void onBackPressed() {
         super.onBackPressed();
 
-        FirebaseAuth.getInstance().signOut();
+        //FirebaseAuth.getInstance().signOut(); *********************if no more fragments sign out current user
     }
 
     @Override

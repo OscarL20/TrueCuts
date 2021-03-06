@@ -178,7 +178,7 @@ public class ChatRoomsFragment extends Fragment implements ChatRoomsAdapter.OnRe
 
         Log.i("testing position", Integer.toString(position));
 
-        getFragmentManager().beginTransaction().replace(R.id.fragment_container, new MessagesFragment()).commit();
+        getFragmentManager().beginTransaction().replace(R.id.fragment_container, new MessagesFragment()).addToBackStack(null).commit();
 
     }
 }

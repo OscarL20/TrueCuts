@@ -83,7 +83,7 @@ public class ChangeBarberShopFragment extends Fragment implements ChangeBarberSh
         updates.put("address", searchResultsList.get(position).getAddress());
         Log.i("put", searchResultsList.get(position).getAddress());
 
-        getFragmentManager().beginTransaction().replace(R.id.fragment_container, new SelectImages()).commit();
+        getFragmentManager().beginTransaction().replace(R.id.fragment_container, new SelectImages()).addToBackStack(null).commit();
         //Toast.makeText(this.getContext(), "Barber shop added to profile", Toast.LENGTH_SHORT).show();
     }
 
