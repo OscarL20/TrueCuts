@@ -57,6 +57,7 @@ public class MessagesFragment extends Fragment implements MessagesAdapter.OnRecy
     ChatViewModel chatViewModel;
     ImageButton send;
     EditText editTextMessage;
+    String notificationMessage;
 
     RecyclerView recyclerView;
     MessagesAdapter messagesAdapter;
@@ -154,6 +155,8 @@ public class MessagesFragment extends Fragment implements MessagesAdapter.OnRecy
             @Override
             public void onClick(View view) {
 
+                notificationMessage = editTextMessage.getText().toString();
+
                 hideSoftKeyboard(getActivity());
 
                 if(chatRoomExist){
@@ -201,12 +204,32 @@ public class MessagesFragment extends Fragment implements MessagesAdapter.OnRecy
 
 
                     //notification ******************************
-
-                    FirebaseDatabase.getInstance().getReference().child("Tokens").child(chatViewModel.getOtherPersonsUid()).child("token").addListenerForSingleValueEvent(new ValueEventListener() {
+                    String userOrBarber;
+                    if (isBarber){
+                        userOrBarber = "barbers";
+                    }else{
+                        userOrBarber = "users";
+                    }
+                    FirebaseDatabase.getInstance().getReference().child(userOrBarber).child(currentUserUid).child("username").addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            String usertoken = dataSnapshot.getValue(String.class);
-                            sendNotifications(usertoken, chatViewModel.getOtherPersonsName(), editTextMessage.getText().toString());
+                            if (dataSnapshot.exists()){
+
+                                final String userName = dataSnapshot.getValue(String.class);
+
+                                FirebaseDatabase.getInstance().getReference().child("Tokens").child(chatViewModel.getOtherPersonsUid()).child("token").addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        String usertoken = dataSnapshot.getValue(String.class);
+                                        sendNotifications(usertoken, userName, notificationMessage);
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                    }
+                                });
+                            }
                         }
 
                         @Override
@@ -235,7 +258,7 @@ public class MessagesFragment extends Fragment implements MessagesAdapter.OnRecy
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot userSnapShot) {
                                     String userProfileImgUrl = userSnapShot.child("images").child("ProfileImage").getValue().toString();
-                                    String userName = userSnapShot.child("username").getValue().toString();
+                                    final String userName = userSnapShot.child("username").getValue().toString();
 
                                     String barberProfileImgUrl = barberSnapShot.getValue().toString();
 
@@ -283,7 +306,7 @@ public class MessagesFragment extends Fragment implements MessagesAdapter.OnRecy
                                         @Override
                                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                             String usertoken = dataSnapshot.getValue(String.class);
-                                            sendNotifications(usertoken, chatViewModel.getOtherPersonsName(), editTextMessage.getText().toString());
+                                            sendNotifications(usertoken, userName, notificationMessage);
                                         }
 
                                         @Override

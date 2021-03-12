@@ -17,6 +17,7 @@ import com.google.firebase.messaging.RemoteMessage;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import e.l2040.truecuts.Message;
 import e.l2040.truecuts.R;
 
 public class MyFireBaseMessagingService extends FirebaseMessagingService {
@@ -43,7 +44,7 @@ public class MyFireBaseMessagingService extends FirebaseMessagingService {
         Notification notification = new NotificationCompat.Builder(getApplicationContext(),CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_chat_24px)
                 .setContentTitle(title)
-                .setContentText(title)
+                .setContentText(message)
                 .build();
         manager.notify(getRandomNumber(),notification);
     }
