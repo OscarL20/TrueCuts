@@ -13,11 +13,13 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -95,6 +97,7 @@ public class AppointmentWithCustomerFragment extends Fragment implements BarberU
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
+                    Log.i("requestedAppointments", "it runs");
                     noRequestedAppointments.setAlpha(0);
 
                     requestedAppointmentList.clear();
@@ -141,6 +144,16 @@ public class AppointmentWithCustomerFragment extends Fragment implements BarberU
                                         customerAppointmentList.get(i).getTime().get(0),
                                         customerAppointmentList.get(i).getDate(),
                                         profileImageUri));
+
+                        i += 1;
+                        getUris();
+                    }else{
+                        requestedAppointmentList.add(
+                                new UpcomingAppointment(
+                                        customerAppointmentList.get(i).getName(),
+                                        customerAppointmentList.get(i).getTime().get(0),
+                                        customerAppointmentList.get(i).getDate(),
+                                        null));
 
                         i += 1;
                         getUris();
